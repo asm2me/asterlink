@@ -5,8 +5,8 @@ package main
 import (
 	"regexp"
 
-	"github.com/serfreeman1337/asterlink/connect"
-	"github.com/serfreeman1337/asterlink/connect/b24"
+	"github.com/asm2me/asterlink/connect"
+	"github.com/asm2me/asterlink/connect/b24"
 	"gopkg.in/yaml.v2"
 )
 

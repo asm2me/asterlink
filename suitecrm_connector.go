@@ -3,8 +3,8 @@
 package main
 
 import (
-	"github.com/serfreeman1337/asterlink/connect"
-	"github.com/serfreeman1337/asterlink/connect/suitecrm"
+	"github.com/asm2me/asterlink/connect"
+	"github.com/asm2me/asterlink/connect/suitecrm"
 	"gopkg.in/yaml.v2"
 )
 

@@ -25,12 +25,8 @@ func (b *b24) apiOriginateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uID, _ := strconv.Atoi(r.FormValue("data[USER_ID]"))
-	ext, ok := b.uIDtoExt(uID)
-	if !ok {
-		cLog.WithField("uid", uID).Warn("Extension not found for user id")
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
+	ext, _ := strconv.Atoi(r.FormValue("data[EXTENSION]"))
+ 
 
 	b.originate(ext, r.FormValue("data[PHONE_NUMBER_INTERNATIONAL]"), r.FormValue("data[CALL_ID]"))
 	w.WriteHeader(http.StatusOK)

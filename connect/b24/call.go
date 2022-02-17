@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/serfreeman1337/asterlink/connect"
+	"github.com/asm2me/asterlink/connect"
 	log "github.com/sirupsen/logrus"
 )
 

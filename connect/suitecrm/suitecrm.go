@@ -6,7 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/serfreeman1337/asterlink/connect"
+	"github.com/asm2me/asterlink/connect"
 )
 
 var dirDesc = map[connect.Direction]string{connect.In: "Inbound", connect.Out: "Outbound"}

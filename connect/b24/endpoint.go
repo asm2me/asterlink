@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
+	"strings" 
 )
 
 func (b *b24) apiOriginateHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +58,7 @@ func (b *b24) apiAssignedHandler(w http.ResponseWriter, r *http.Request) {
 
 	ext, ok := b.uIDtoExt(contact.Assigned)
 	if !ok {
-		cLog.WithField("uid", contact.Assigned).Warn("Extension not found for user id")
+		cLog.WithField("uid", contact.Assigned).Warn("_____Extension not found for user id")
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}

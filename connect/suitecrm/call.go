@@ -3,7 +3,7 @@ package suitecrm
 import (
 	"time"
 
-	"github.com/serfreeman1337/asterlink/connect"
+	"github.com/asm2me/asterlink/connect"
 )
 
 const mysqlFormat = "2006-01-02 15:04:05"

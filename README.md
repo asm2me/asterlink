@@ -1,5 +1,13 @@
 # AsterLink
 Asterisk CRM Connector. 
+This is a modified version to support bitrix with large number of users, which cannot be called by a single paage API call, this version assume the EXTENSION is sent from bitrix, so there is a webhook.php file which works as a proxy to switch GET call to POST in case you faced an error from Asterlink, webhook.php also fixes missing EXTENSION number by calling user.get with the ID and retrive the extension number, so, you just put webhook.php in your webserver directory and allow external calls from internet,
+
+NOTE: bitrix outbound calls can't get local network calls, so all outbound calls will be routed through oauth.bitrix.com server, you must have webhook.php published so you can accept calls from cloud,
+
+there must be a way to call directly local network outbound api using bitrix PROVIDERS class but I still didn't find how 
+
+
+
 Supports FreePBX v14 integration with [Bitrix24](https://github.com/serfreeman1337/asterlink/blob/master/README_bitrix24.md) and [SuiteCRM](https://github.com/serfreeman1337/asterlink/blob/master/README_suitecrm.md).
 
 # Asterisk

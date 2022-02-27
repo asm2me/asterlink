@@ -144,8 +144,28 @@ func (b *b24) handleDial(c *connect.Call, ext string, isDial bool) {
 	if !ok || !e.isRegistred() {
 		return
 	}
+	
+	
+	
+	
+	
+	var r struct {
+		Result []struct {
+			ID    int    `json:"ID,string"`
+			Phone string `json:"UF_PHONE_INNER"`
+		}
+	}
+	err := b.req("user.get", map[string]map[string]string{
+		"filter": {"UF_PHONE_INNER": ext},
+	}, &r)
 
-	uID, ok := b.eUID[ext]
+	if err != nil {
+		b.log.Error("Failed to update users list")
+		return
+	}	
+	 
+
+	uID, ok := r.Result[0].ID
 	if !ok {
 		e.log.WithField("ext", ext).Warn("Cannot find user id for extension")
 		return

@@ -66,8 +66,8 @@ Install asterlink under **/opt/asterlink** folder.
   ```
   * Or build it from source (assume you have go installed)
   ```bash
-  go get github.com/serfreeman1337/asterlink
-  go build github.com/serfreeman1337/asterlink
+  go get github.com/asm2me/asterlink
+  go build github.com/asm2me/asterlink
   ```
 * Create configuration file. Use conf.example.yml as example.
   ```bash

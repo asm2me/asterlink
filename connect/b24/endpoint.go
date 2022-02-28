@@ -3,8 +3,7 @@ package b24
 import (
 	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
+	"strings" 
 )
 
 func (b *b24) apiOriginateHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,15 +23,8 @@ func (b *b24) apiOriginateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uID, _ := strconv.Atoi(r.FormValue("data[USER_ID]"))
-	ext, ok := b.uIDtoExt(uID)
-	if !ok {
-		cLog.WithField("uid", uID).Warn("Extension not found for user id")
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
 
-	b.originate(ext, r.FormValue("data[PHONE_NUMBER_INTERNATIONAL]"), r.FormValue("data[CALL_ID]"))
+	b.originate(r.FormValue("data[EXTENSION]"), r.FormValue("data[PHONE_NUMBER_INTERNATIONAL]"), r.FormValue("data[CALL_ID]"))
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -62,7 +54,7 @@ func (b *b24) apiAssignedHandler(w http.ResponseWriter, r *http.Request) {
 
 	ext, ok := b.uIDtoExt(contact.Assigned)
 	if !ok {
-		cLog.WithField("uid", contact.Assigned).Warn("Extension not found for user id")
+		cLog.WithField("uid", contact.Assigned).Warn("_____Extension not found for user id")
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}

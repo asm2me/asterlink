@@ -120,8 +120,10 @@ func (b *b24) End(c *connect.Call, cause string) {
 	if !c.TimeAnswer.IsZero() {
 		params.Dur = int(time.Since(c.TimeAnswer).Seconds())
 		params.Status = "200"
+		e.log.Debug("call time=0 ---------------------")		
 	} else {
 		params.Dur = int(time.Since(c.TimeCall).Seconds())
+		e.log.Debug("call time:"+strconv.Itoa( params.Dur) )		
 
 		if cause == "16" {
 			if c.Dir == connect.In {
@@ -142,13 +144,19 @@ func (b *b24) End(c *connect.Call, cause string) {
 	}
 
 	b.req("telephony.externalcall.finish", params, nil)
+	
+	
 	// TODO: HANDLE ERROR!!!!
 	// upload recording
-	if b.cfg.RecUp != "" && !c.TimeAnswer.IsZero() && c.Rec != "" {
+	e.log.Debug("b.cfg.RecUp:"+b.cfg.RecUp )		
+	e.log.Debug("c.TimeAnswer:"+c.TimeAnswer.String() )
+	e.log.Debug("c.Rec:"+c.Rec )
+	
+	if b.cfg.RecUp != "" &&params.Dur>0&&  c.Rec != "" {
 		file := path.Base(c.Rec)
 		url := b.cfg.RecUp + c.Rec
 
-		e.log.WithFields(log.Fields{url: url}).Debug("====================Attaching call record=====================")
+		e.log.WithFields(log.Fields{url: url}).Debug("URL:"+url+"====================Attaching call record=====================")
 		b.req("telephony.externalCall.attachRecord", map[string]string{
 			"CALL_ID":    e.ID,
 			"FILENAME":   file,

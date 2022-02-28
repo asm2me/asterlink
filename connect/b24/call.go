@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/serfreeman1337/asterlink/connect"
+	"github.com/asm2me/asterlink/connect"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -48,6 +48,9 @@ func (b *b24) Start(c *connect.Call) {
 	}
 	err := b.req("telephony.externalcall.register", params, &r)
 	// TODO: ERROR HANDLING!!!
+	e.ID = r.Result.ID
+	e.log.WithField("id", e.ID).Debug("uID:"+strconv.Itoa(uID)+"===========Call.register !!=============")
+
 	if err != nil {
 		delete(b.ent, c.LID)
 		e.mux.Unlock()
@@ -55,8 +58,6 @@ func (b *b24) Start(c *connect.Call) {
 		return
 	}
 
-	e.ID = r.Result.ID
-	e.log.WithField("id", e.ID).Debug("Call registred")
 
 	e.mux.Unlock()
 }
@@ -79,11 +80,32 @@ func (b *b24) End(c *connect.Call, cause string) {
 	}
 	defer delete(b.ent, c.LID)
 
-	uID, ok := b.eUID[c.Ext]
-	if !ok {
-		uID = b.cfg.DefUID
+//	uID, ok := b.eUID[c.Ext]
+	
+	
+	var r struct {
+		Result []struct {
+			ID    int    `json:"ID,string"`
+			Phone string `json:"UF_PHONE_INNER"`
+		}
 	}
+	err := b.req("user.get", map[string]map[string]string{
+		"filter": {"UF_PHONE_INNER": c.Ext},
+	}, &r)
 
+	if err != nil {
+		b.log.Error("Failed to Get UserID from Extension")
+		return
+	}	
+
+ 
+
+	var uID = r.Result[0].ID
+	e.log.WithField("id", e.ID).Debug("uID:"+strconv.Itoa(uID)+"===========Call Finished=============")
+	
+	
+	
+	
 	var params struct {
 		ID     string `json:"CALL_ID"`
 		UID    int    `json:"USER_ID"`
@@ -119,18 +141,14 @@ func (b *b24) End(c *connect.Call, cause string) {
 		params.Vote, _ = strconv.Atoi(c.Vote)
 	}
 
-	err := b.req("telephony.externalcall.finish", params, nil)
+	b.req("telephony.externalcall.finish", params, nil)
 	// TODO: HANDLE ERROR!!!!
-	if err != nil {
-		return
-	}
-
 	// upload recording
 	if b.cfg.RecUp != "" && !c.TimeAnswer.IsZero() && c.Rec != "" {
 		file := path.Base(c.Rec)
 		url := b.cfg.RecUp + c.Rec
 
-		e.log.WithFields(log.Fields{url: url}).Debug("Attaching call record")
+		e.log.WithFields(log.Fields{url: url}).Debug("====================Attaching call record=====================")
 		b.req("telephony.externalCall.attachRecord", map[string]string{
 			"CALL_ID":    e.ID,
 			"FILENAME":   file,
@@ -144,13 +162,31 @@ func (b *b24) handleDial(c *connect.Call, ext string, isDial bool) {
 	if !ok || !e.isRegistred() {
 		return
 	}
-
-	uID, ok := b.eUID[ext]
-	if !ok {
-		e.log.WithField("ext", ext).Warn("Cannot find user id for extension")
-		return
+	
+	
+	
+	
+	
+	var r struct {
+		Result []struct {
+			ID    int    `json:"ID,string"`
+			Phone string `json:"UF_PHONE_INNER"`
+		}
 	}
+	err := b.req("user.get", map[string]map[string]string{
+		"filter": {"UF_PHONE_INNER": ext},
+	}, &r)
 
+	if err != nil {
+		b.log.Error("Failed to update users list")
+		return
+	}	
+
+ 
+
+	var uID = r.Result[0].ID
+	e.log.WithField("id", e.ID).Debug("uID:"+strconv.Itoa(uID)+"===========Call Dialled=============")
+	
 	method := "telephony.externalcall."
 
 	if isDial {

@@ -3,7 +3,6 @@ package b24
 import (
 	"fmt"
 	"net/http"
-	//"strconv"
 	"strings" 
 )
 
@@ -24,9 +23,6 @@ func (b *b24) apiOriginateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uID, _ := strconv.Atoi(r.FormValue("data[USER_ID]"))
-	//ext, _ := strconv.Atoi(r.FormValue("data[EXTENSION]"))
- 
 
 	b.originate(r.FormValue("data[EXTENSION]"), r.FormValue("data[PHONE_NUMBER_INTERNATIONAL]"), r.FormValue("data[CALL_ID]"))
 	w.WriteHeader(http.StatusOK)

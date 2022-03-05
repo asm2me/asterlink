@@ -179,6 +179,7 @@ func (a *amiConnector) onError(message string) {
 
 // incoming call
 func (a *amiConnector) onNewchannel(e map[string]string) {
+	c, ok := a.cdr[e["Linkedid"]]
 	if /*_, ok := IncomingContext[e["Context"]]; !ok || */ e["Exten"] == "s" { // TODO: review this 's'!
 		return
 	}
@@ -215,13 +216,15 @@ func (a *amiConnector) onNewchannel(e map[string]string) {
 		Dir:      connect.In,
 		CID:      cID,
 		DID:      e["Exten"],
+		Ext:      e["Exten"],
 		TimeCall: time.Now(),
 		Ch:       e["Channel"],
 		Log:      log.WithField("lid", e["Linkedid"]),
 	}
-	a.cdr[e["Linkedid"]].Log.Debug("New incoming call")
+	a.cdr[e["Linkedid"]].Log.Debug("New incoming call   EXT:"+e["Exten"] )
 
-	go a.connector.Start(a.cdr[e["Linkedid"]])
+//	go a.connector.Start(a.cdr[e["Linkedid"]])
+	go a.connector.Dial(c, e["DestCallerIDNum"])
 }
 
 // operator dial

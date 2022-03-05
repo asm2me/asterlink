@@ -171,6 +171,8 @@ func (b *b24) handleDial(c *connect.Call, ext string, isDial bool) {
 		return
 	}
 	
+	e.log.WithField("id", e.ID).Debug("EXT:"+ c.Ext  +"===========Call Dialled=============")
+	
 	
 	
 	
@@ -193,7 +195,7 @@ func (b *b24) handleDial(c *connect.Call, ext string, isDial bool) {
  
 
 	var uID = r.Result[0].ID
-	e.log.WithField("id", e.ID).Debug("uID:"+strconv.Itoa(uID)+"===========Call Dialled=============")
+	e.log.WithField("id", e.ID).Debug("uID:"+strconv.Itoa(uID)+"......................Call Dialled ")
 	
 	method := "telephony.externalcall."
 
